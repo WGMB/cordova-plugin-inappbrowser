@@ -24,7 +24,7 @@
 #endif
 
 #import <Cordova/CDVPluginResult.h>
-#import <Cordova/CDVUserAgentUtil.h>
+//#import <Cordova/CDVUserAgentUtil.h>
 
 #define    kInAppBrowserTargetSelf @"_self"
 #define    kInAppBrowserTargetSystem @"_system"
@@ -209,16 +209,16 @@ static CDVWKInAppBrowser* instance = nil;
     }
 
     if (self.inAppBrowserViewController == nil) {
-        NSString* userAgent = [CDVUserAgentUtil originalUserAgent];
-        NSString* overrideUserAgent = [self settingForKey:@"OverrideUserAgent"];
-        NSString* appendUserAgent = [self settingForKey:@"AppendUserAgent"];
-        if(overrideUserAgent){
-            userAgent = overrideUserAgent;
-        }
-        if(appendUserAgent){
-            userAgent = [userAgent stringByAppendingString: appendUserAgent];
-        }
-        self.inAppBrowserViewController = [[CDVWKInAppBrowserViewController alloc] initWithUserAgent:userAgent prevUserAgent:[self.commandDelegate userAgent] browserOptions: browserOptions];
+//        NSString* userAgent = [CDVUserAgentUtil originalUserAgent];
+//        NSString* overrideUserAgent = [self settingForKey:@"OverrideUserAgent"];
+//        NSString* appendUserAgent = [self settingForKey:@"AppendUserAgent"];
+//        if(overrideUserAgent){
+//            userAgent = overrideUserAgent;
+//        }
+//        if(appendUserAgent){
+//            userAgent = [userAgent stringByAppendingString: appendUserAgent];
+//        }
+        self.inAppBrowserViewController = [[CDVWKInAppBrowserViewController alloc] initWithUserAgent:nil prevUserAgent:nil browserOptions: browserOptions];
         self.inAppBrowserViewController.navigationDelegate = self;
         
         if ([self.viewController conformsToProtocol:@protocol(CDVScreenOrientationDelegate)]) {
@@ -1074,7 +1074,7 @@ BOOL isExiting = FALSE;
 
 - (void)close
 {
-    [CDVUserAgentUtil releaseLock:&_userAgentLockToken];
+    //[CDVUserAgentUtil releaseLock:&_userAgentLockToken];
     self.currentURL = nil;
     
     __weak UIViewController* weakSelf = self;
@@ -1098,11 +1098,12 @@ BOOL isExiting = FALSE;
         [self.webView loadRequest:request];
     } else {
         __weak CDVWKInAppBrowserViewController* weakSelf = self;
-        [CDVUserAgentUtil acquireLock:^(NSInteger lockToken) {
-            _userAgentLockToken = lockToken;
-            [CDVUserAgentUtil setUserAgent:_userAgent lockToken:lockToken];
-            [weakSelf.webView loadRequest:request];
-        }];
+		[weakSelf.webView loadRequest:request];
+//        [CDVUserAgentUtil acquireLock:^(NSInteger lockToken) {
+//            _userAgentLockToken = lockToken;
+//            [CDVUserAgentUtil setUserAgent:_userAgent lockToken:lockToken];
+//            [weakSelf.webView loadRequest:request];
+//        }];
     }
 }
 
@@ -1218,7 +1219,7 @@ BOOL isExiting = FALSE;
     //TODO webview class
     //BOOL isPDF = [@"true" isEqualToString :[theWebView evaluateJavaScript:@"document.body==null"]];
     if (isPDF) {
-        [CDVUserAgentUtil setUserAgent:_prevUserAgent lockToken:_userAgentLockToken];
+        //[CDVUserAgentUtil setUserAgent:_prevUserAgent lockToken:_userAgentLockToken];
     }
     
     [self.navigationDelegate didFinishNavigation:theWebView];
@@ -1275,14 +1276,14 @@ BOOL isExiting = FALSE;
     return 1 << UIInterfaceOrientationPortrait;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(shouldAutorotateToInterfaceOrientation:)]) {
-        return [self.orientationDelegate shouldAutorotateToInterfaceOrientation:interfaceOrientation];
-    }
-    
-    return YES;
-}
+//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//{
+//    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(shouldAutorotateToInterfaceOrientation:)]) {
+//        return [self.orientationDelegate shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+//    }
+//
+//    return YES;
+//}
 
 
 @end //CDVWKInAppBrowserViewController
