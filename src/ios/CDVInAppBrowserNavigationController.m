@@ -51,13 +51,13 @@
     return YES;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
-    if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(supportedInterfaceOrientations)]) {
-        return [self.orientationDelegate supportedInterfaceOrientations];
-    }
+// - (UIInterfaceOrientationMask)supportedInterfaceOrientations
+// {
+//     if ((self.orientationDelegate != nil) && [self.orientationDelegate respondsToSelector:@selector(supportedInterfaceOrientations)]) {
+//         return [self.orientationDelegate supportedInterfaceOrientations];
+//     }
 
-    return 1 << UIInterfaceOrientationPortrait;
-}
+//     return 1 << UIInterfaceOrientationPortrait;
+// }
 
 @end
